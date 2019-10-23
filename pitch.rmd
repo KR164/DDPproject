@@ -1,0 +1,62 @@
+---
+title: "Quakes app"
+author: "Karen Reijneveld"
+date: "21 oktober 2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Fiji Earthquakes
+
+From the available datasets in R, I chose 'quakes' for my Shiny app. 
+
+The dataset gives the locations of 1000 seismic events of MB > 4.0. 
+The data frame contains 1000 observations of 5 numeric variables:  
+
+* lat: 	 Latitude of event  
+* long:  Longitude of event
+* depth: Depth (km)  
+* mag: 	 Richter Magnitude  
+* stations:  Number of stations reporting  
+
+```{r data, message = FALSE}
+library(dplyr)
+data(quakes)
+attach(quakes)
+```
+
+## The app
+
+The app on next slide shows the earthquakes on a map.      
+
+
+* You can choose to show the magnitude, depth or the number of stations on the map.   
+
+* You can use sliders to filter the data for magnitude and depth.   
+
+* The legend adapts to your choices.  
+
+* Help information is provided (click on question marks)  
+
+http://rpubs.com/KReij/542012 
+
+
+## Quakes app
+```{r}
+knitr::include_app("https://reijn164.shinyapps.io/MyShinyApp/", height = "500px")
+```
+## Additional info
+The distribution of the data is not very clear on a map like this. 
+In a next version of the app, it would be nice to add a visualisation of the distribution(s).
+```{r, fig.height=3}
+par(mfrow=(c(1,2)))
+hist(mag, col = "green", xlab = "Magnitude", main="")
+hist(depth, col = "blue", xlab = "Depth (km)", main= "")
+abline(v=mean(depth))
+```
+Some calculations:  
+The mean depth of the earthquakes is `r round(mean(depth))` km.  
+`r 100*count(filter(quakes, mag >5))/count(quakes)`% of the earthquakes has a magnitude higher than 5.
